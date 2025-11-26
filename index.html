@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Farm360 Registration — Farm360 নিবন্ধন</title>
+    <style>
+      :root {
+        --bg: #f7fbf6;
+        --card: #ffffff;
+        --accent: #2b8a3e;
+        --muted: #6b7280;
+        --danger: #d9534f;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans",
+          "Helvetica Neue", Arial;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background: linear-gradient(180deg, #eef7ef 0%, var(--bg) 100%);
+        color: #111;
+      }
+      .wrap {
+        min-height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .card {
+        width: 100%;
+        max-width: 420px;
+        background: var(--card);
+        border-radius: 12px;
+        box-shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
+        padding: 28px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 20px;
+      }
+      p.lead {
+        margin: 0 0 20px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      form {
+        display: grid;
+        gap: 14px;
+      }
+      label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 6px;
+        color: #0f172a;
+      }
+      .bilingual {
+        font-size: 13px;
+        color: var(--muted);
+        display: block;
+        margin-top: 3px;
+      }
+      input[type="tel"],
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e6e9ef;
+        border-radius: 8px;
+        font-size: 15px;
+        background: transparent;
+        box-sizing: border-box;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 14px;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 8px;
+        border: 0;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .secondary {
+        background: #eef3ee;
+        color: var(--accent);
+        border: 1px solid rgba(43, 138, 62, 0.12);
+      }
+      .hint {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .error {
+        color: var(--danger);
+        font-size: 13px;
+      }
+      .success {
+        color: #0f9d58;
+        font-size: 14px;
+      }
+      .lang-toggle {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      footer {
+        margin-top: 12px;
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+      }
+      @media (max-width: 420px) {
+        .card {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <main class="card" role="main">
+        <div class="lang-toggle">
+          <strong style="font-size: 14px">Farm360</strong>
+          <div style="margin-left: auto" class="small">
+            Language: <span id="langLabel">EN / বাংলা</span>
+          </div>
+        </div>
+
+        <h1>Register for Farm360 — Farm360-এ নিবন্ধন করুন</h1>
+        <p class="lead">
+          Create your account to buy or sell produce. | পণ্য কেনা বিক্রির জন্য
+          অ্যাকাউন্ট তৈরি করুন।
+        </p>
+
+        <form id="registerForm" novalidate>
+          <div>
+            <label for="phone">Phone number — ফোন নম্বর</label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              inputmode="tel"
+              placeholder="+8801xxxxxxxxx — উদাহরণ: +8801XXXXXXXXX"
+              maxlength="16"
+              pattern="^\+?\d{7,15}$"
+              required
+            />
+            <span class="bilingual"
+              >Enter country code with number. | দেশের কোডসহ নম্বর লিখুন।</span
+            >
+            <div
+              id="phoneErr"
+              class="error"
+              aria-live="polite"
+              style="display: none"
+            ></div>
+          </div>
+
+          <div>
+            <label for="role">Role — ভূমিকা</label>
+            <select id="role" name="role" required>
+              <option value="">Select role — ভূমিকা বাছাই করুন</option>
+              <option value="farmer">Farmer — কৃষক</option>
+              <option value="buyer">Buyer — ক্রেতা</option>
+            </select>
+            <div
+              id="roleErr"
+              class="error"
+              aria-live="polite"
+              style="display: none"
+            ></div>
+          </div>
+
+          <div class="row" style="margin-top: 6px">
+            <button type="submit" class="btn">Register — নিবন্ধন</button>
+            <button type="button" id="clearBtn" class="secondary">
+              Clear — মুছে ফেলুন
+            </button>
+          </div>
+
+          <div
+            id="msg"
+            role="status"
+            aria-live="polite"
+            style="margin-top: 8px"
+          ></div>
+
+          <p class="hint">
+            By registering you agree to our terms. | নিবন্ধন করে আপনি আমাদের
+            শর্তাবলীতে সম্মত হচ্ছেন।
+          </p>
+        </form>
+
+        <footer>
+          Need help? Contact support@farm360.example | সহায়তার জন্য যোগাযোগ:
+          support@farm360.example
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      // Minimal client-side validation and UX
+      const form = document.getElementById("registerForm");
+      const phone = document.getElementById("phone");
+      const role = document.getElementById("role");
+      const phoneErr = document.getElementById("phoneErr");
+      const roleErr = document.getElementById("roleErr");
+      const msg = document.getElementById("msg");
+      const clearBtn = document.getElementById("clearBtn");
+
+      function resetErrors() {
+        phoneErr.style.display = "none";
+        roleErr.style.display = "none";
+        msg.textContent = "";
+        msg.className = "";
+      }
+
+      function validatePhone(value) {
+        // Accepts digits with optional leading +, length between 7 and 15 digits
+        const normalized = value.trim();
+        const re = /^\+?\d{7,15}$/;
+        return re.test(normalized);
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        resetErrors();
+        let valid = true;
+
+        if (!phone.value || !validatePhone(phone.value)) {
+          phoneErr.textContent =
+            "Please enter a valid phone number (with country code). | দেশের কোডসহ সঠিক ফোন নম্বর দিন।";
+          phoneErr.style.display = "block";
+          valid = false;
+        }
+
+        if (!role.value) {
+          roleErr.textContent = "Please select a role. | ভূমিকা নির্বাচন করুন।";
+          roleErr.style.display = "block";
+          valid = false;
+        }
+
+        if (!valid) return;
+
+        // Simulate successful registration (replace with real API call)
+        const roleLabel = role.options[role.selectedIndex].text;
+        msg.className = "success";
+        msg.textContent =
+          "Registered successfully as " +
+          roleLabel +
+          ". | " +
+          "নিবন্ধন সফলভাবে সম্পন্ন হয়েছে: " +
+          roleLabel +
+          ".";
+        form.reset();
+      });
+
+      clearBtn.addEventListener("click", function () {
+        form.reset();
+        resetErrors();
+      });
+
+      // Optional: prevent non-numeric chars except plus for phone input
+      phone.addEventListener("input", function () {
+        const val = phone.value;
+        // allow digits, spaces, dashes, parentheses, plus; replace multiple spaces
+        const cleaned = val.replace(/[^+\d\s\-()]/g, "");
+        if (cleaned !== val) phone.value = cleaned;
+      });
+
+      // Accessibility: focus first invalid field on submit attempt
+      form.addEventListener(
+        "invalid",
+        function (event) {
+          event.preventDefault();
+          event.target.focus();
+        },
+        true
+      );
+    </script>
+  </body>
+</html>
