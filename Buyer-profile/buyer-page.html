@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Buyer Profile — ক্রেতা প্রোফাইল</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #f7fbf6;
+        --card: #fff;
+        --accent: #2b8a3e;
+        --muted: #6b7280;
+        --border: #e6e9ef;
+        --danger: #d9534f;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans",
+          "Helvetica Neue", Arial;
+      }
+      html,
+      body {
+        height: 100%;
+        background: linear-gradient(180deg, #eef7ef 0%, var(--bg) 100%);
+        color: #111;
+      }
+      .container {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 24px;
+        min-height: 100vh;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      h1 {
+        color: var(--accent);
+        font-size: 24px;
+      }
+      .card {
+        background: var(--card);
+        padding: 22px;
+        border-radius: 12px;
+        box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .bilingual {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      input[type="text"],
+      input[type="number"],
+      select,
+      input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .row.full {
+        grid-template-columns: 1fr;
+      }
+      .button-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .btn {
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: 0;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+      }
+      .btn-secondary {
+        background: #eef3ee;
+        color: var(--accent);
+        border: 1px solid rgba(43, 138, 62, 0.12);
+      }
+      .hint {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .error {
+        color: var(--danger);
+        font-size: 13px;
+        margin-top: 6px;
+        display: none;
+      }
+      .error.show {
+        display: block;
+      }
+      .success {
+        color: green;
+        margin-top: 8px;
+        display: none;
+      }
+      .preview {
+        max-width: 240px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-top: 8px;
+      }
+      @media (max-width: 768px) {
+        .row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1 id="pageTitle">Buyer Profile — ক্রেতা প্রোফাইল</h1>
+      </div>
+
+      <form id="buyerForm" novalidate>
+        <!-- Basic Details -->
+        <div class="card">
+          <h2>Basic Details — মৌলিক বিবরণ</h2>
+
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <span class="bilingual">পূর্ণ নাম</span>
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              placeholder="Enter full name — পূর্ণ নাম লিখুন"
+              required
+            />
+            <div class="error" id="fullNameErr"></div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="aadhar">Aadhaar No</label>
+              <span class="bilingual">আধার নম্বর</span>
+              <input
+                type="text"
+                id="aadhar"
+                name="aadhar"
+                placeholder="12-digit Aadhaar — ১২ সংখ্যার আধার"
+                maxlength="12"
+              />
+              <div style="margin-top: 8px; display: flex; gap: 8px">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="verifyAadhaarBtn"
+                >
+                  Verify — যাচাই
+                </button>
+                <div id="aadharStatus" class="hint"></div>
+              </div>
+              <div class="error" id="aadharErr"></div>
+            </div>
+
+            <div>
+              <label for="aadharPhoto">Aadhaar Photo</label>
+              <span class="bilingual">আধারের ছবি</span>
+              <input type="file" id="aadharPhoto" accept="image/*" />
+              <img
+                id="aadharPreview"
+                class="preview"
+                src=""
+                alt="Aadhaar preview"
+                style="display: none"
+              />
+              <div class="error" id="aadharPhotoErr"></div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 12px">
+            <div>
+              <label for="district">District (West Bengal)</label>
+              <span class="bilingual">জেলা (পশ্চিমবঙ্গ)</span>
+              <select id="district" name="district">
+                <option value="">Select district — জেলা নির্বাচন করুন</option>
+              </select>
+              <div class="error" id="districtErr"></div>
+            </div>
+
+            <div>
+              <label for="block">Block</label>
+              <span class="bilingual">ব্লক</span>
+              <select id="block" name="block" disabled>
+                <option value="">Select block — ব্লক নির্বাচন করুন</option>
+              </select>
+              <div class="error" id="blockErr"></div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 12px">
+            <div>
+              <label for="city">City</label>
+              <span class="bilingual">শহর</span>
+              <select id="city">
+                <option value="">Select city — শহর নির্বাচন করুন</option>
+                <option>Kolkata</option>
+                <option>Howrah</option>
+                <option>Haldia</option>
+              </select>
+            </div>
+            <div>
+              <label for="village">Village Name</label>
+              <span class="bilingual">গ্রামের নাম</span>
+              <input
+                type="text"
+                id="village"
+                placeholder="Village or area — গ্রাম/এলাকা"
+              />
+            </div>
+          </div>
+
+          <div style="margin-top: 12px">
+            <label for="pin">PIN Code</label>
+            <span class="bilingual">পিন কোড</span>
+            <input
+              type="text"
+              id="pin"
+              maxlength="6"
+              placeholder="e.g., 700001"
+            />
+            <div class="error" id="pinErr"></div>
+          </div>
+        </div>
+
+        <!-- Business Details -->
+        <div class="card">
+          <h2>Business Details — ব্যবসার বিবরণ</h2>
+
+          <div class="form-group">
+            <label for="businessName">Business Name</label>
+            <span class="bilingual">ব্যবসার নাম</span>
+            <input type="text" id="businessName" />
+            <div class="error" id="businessNameErr"></div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="businessType">Business Type</label>
+              <span class="bilingual">ব্যবসার ধরন</span>
+              <select id="businessType">
+                <option value="">Select type — ধরন নির্বাচন করুন</option>
+                <option value="individual">Individual — ব্যক্তি</option>
+                <option value="company">Company — কোম্পানি</option>
+                <option value="exporter">Exporter — রপ্তানিকারক</option>
+                <option value="wholesaler">Wholesaler — পাইকারি</option>
+                <option value="retailer">Retailer — খুচরা বিক্রেতা</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="businessScale">Business Scale</label>
+              <span class="bilingual">ব্যবসার পরিধি</span>
+              <select id="businessScale">
+                <option value="">Select scale — পরিধি নির্বাচন করুন</option>
+                <option value="small">Small — ক্ষুদ্র</option>
+                <option value="medium">Medium — মাঝারি</option>
+                <option value="large">Large — বড়</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top: 12px">
+            <label>Government approvals</label>
+            <div class="bilingual">সরকারি অনুমোদন</div>
+            <div
+              style="display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap"
+            >
+              <label
+                ><input type="checkbox" id="payTax" /> Pay Tax — কর প্রদান
+                করে</label
+              >
+              <label
+                ><input type="checkbox" id="gstRegistered" /> GST Registered —
+                জিএসটি নিবন্ধিত</label
+              >
+              <label
+                ><input type="checkbox" id="licence" /> Has Licence — লাইসেন্স
+                আছে</label
+              >
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 12px">
+            <div>
+              <label for="businessAge">Business Age</label>
+              <span class="bilingual">ব্যবসার সময়কাল</span>
+              <select id="businessAge">
+                <option value="">Select — নির্বাচন করুন</option>
+                <option value="lt1">Less than 1 — ১ বছরের কম</option>
+                <option value="1to5">1 to 5 — ১-৫ বছর</option>
+                <option value="gt5">More than 5 — ৫ বছরের বেশি</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="wareName">Warehouse Name</label>
+              <span class="bilingual">গুদামের নাম</span>
+              <input type="text" id="wareName" />
+            </div>
+          </div>
+
+          <div style="margin-top: 12px">
+            <label for="wareLocation">Warehouse Location</label>
+            <span class="bilingual">গুদামের অবস্থান</span>
+            <input type="text" id="wareLocation" />
+          </div>
+
+          <div style="margin-top: 12px">
+            <label for="annualPurchase">Annual Purchase</label>
+            <span class="bilingual">বার্ষিক ক্রয়</span>
+            <select id="annualPurchase">
+              <option value="">Select — নির্বাচন করুন</option>
+              <option value="lt10">Less than 10 tons — ১০ টনের কম</option>
+              <option value="10to100">10 to 100 tons — ১০-১০০ টন</option>
+              <option value="gt100">More than 100 tons — ১০০ টনের বেশি</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Crops they deal with -->
+        <div class="card">
+          <h2>Crops Dealt With — এগুলো ক্রয়/বিক্রয় করেন</h2>
+
+          <div class="form-group">
+            <label for="buyerCrops">Crops</label>
+            <span class="bilingual">ফসল</span>
+            <div
+              id="buyerCropsContainer"
+              style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px"
+            ></div>
+            <div class="error" id="buyerCropsErr"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="buyerCropSub">Crop Subcategories</label>
+            <span class="bilingual">ফসলের উপবিভাগ</span>
+            <select
+              id="buyerCropSub"
+              multiple
+              size="6"
+              disabled
+              style="
+                width: 100%;
+                margin-top: 8px;
+                border-radius: 8px;
+                padding: 8px;
+                border: 1px solid var(--border);
+              "
+            ></select>
+            <div class="hint">
+              Hold Ctrl/Cmd to select multiple — Ctrl/Cmd ধরে একাধিক নির্বাচন
+              করুন
+            </div>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">
+            Submit — জমা দিন
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="resetForm()">
+            Clear — মুছে ফেলুন
+          </button>
+        </div>
+
+        <div id="formMsg" class="success"></div>
+      </form>
+    </div>
+
+    <script>
+      // Reuse districtBlockData and cropsData similar to farmer page
+      const districtBlockData = {
+        Alipurduar: ["Alipurduar I", "Alipurduar II"],
+        Bankura: [
+          "Bankura I",
+          "Bankura II",
+          "Bishnupur",
+          "Khatra",
+          "Santiniketan",
+        ],
+        Bardhaman: ["Bardhaman I", "Bardhaman II", "Asansol", "Durgapur"],
+        Darjeeling: ["Darjeeling", "Kalimpong", "Kurseong"],
+        "East Medinipur": ["Egra", "Haldia", "Medinipur", "Ramnagar", "Tamluk"],
+        Hooghly: [
+          "Arambagh",
+          "Dhaniakhali",
+          "Dhubulia",
+          "Goghat",
+          "Polba",
+          "Serampore",
+        ],
+        Howrah: ["Amta", "Howrah", "Jagatballavpur", "Panchla", "Shyampur"],
+        Jalpaiguri: ["Jalpaiguri", "Maynaguri", "Nagrakata", "Rajganj"],
+        Jhargram: ["Goaltore", "Jhargram", "Nayagram", "Porahat"],
+        Kolkata: ["Alipore", "Ballygunge", "Shyam Bazaar"],
+        Malda: ["Habibpur", "Kaliachak", "Malda", "Manigram"],
+        Murshidabad: [
+          "Berhampur",
+          "Burwan",
+          "Khagra",
+          "Lalgola",
+          "Raghunathganj",
+        ],
+        Nadia: ["Chakdah", "Kaliganj", "Krishnanagar", "Nabadwip"],
+        "North 24 Parganas": ["Barasat", "Basirhat", "Bidhannagar", "Rajarhat"],
+        "North Dinajpur": ["Balurghat", "Birbhum", "Gangarampur"],
+        "Purba Bardhaman": ["Jamalpur", "Kalna", "Katwa", "Purba Bardhaman"],
+        Purulia: ["Baghmundi", "Purulia", "Raghunathpur"],
+        "South 24 Parganas": ["Baruipur", "Canning", "Kolkhali", "Sundarban"],
+        "South Dinajpur": ["Gangarampur", "Kumarganj", "Tapan"],
+        "West Medinipur": ["Debra", "Kharagpur", "Medinipur", "Moyna"],
+        Birbhum: ["Bolpur", "Rampurhat", "Suri"],
+      };
+
+      const cropsData = {
+        "Rice / ধান": [
+          "Swarna — স্বর্ণা",
+          "IR-64 — আইআর-৬৪",
+          "Rajendra Kasturi — রাজেন্দ্র কাস্তুরী",
+          "Sona Masuri — সোনা মাসুরি",
+          "Basmati — বাসমতি",
+        ],
+        "Wheat / গম": [
+          "HD-2733 — এইচডি-২৭৩৩",
+          "PBW-343 — পিবিডাবলিউ-৩৪৩",
+          "UP-2338 — ইউপি-২৩৩৮",
+          "Sonalika — সোনালিকা",
+        ],
+        "Maize / ভুট্টা": [
+          "Dekalb — ডেকালব",
+          "Pioneer — পাইওনিয়ার",
+          "Hybrids — হাইব্রিড",
+          "Local varieties — স্থানীয় জাত",
+        ],
+        "Potato / আলু": [
+          "Kufri Pukhraj — কুফরি পুখরাজ",
+          "Kufri Himalini — কুফরি হিমালিনী",
+          "Kufri Aloo Jai — কুফরি আলু জাই",
+          "Local Red — স্থানীয় লাল",
+        ],
+        "Pulses / ডাল": [
+          "Masur — মাসুর",
+          "Moong — মুং",
+          "Arhar — অড়হর",
+          "Gram — ছোলা",
+        ],
+        "Sugarcane / আখ": [
+          "Co-86031 — কো-৮৬০৩১",
+          "Co-99004 — কো-৯৯০০৪",
+          "Local — স্থানীয়",
+          "Co-0118 — কো-০১১৮",
+        ],
+        "Jute / পাট": [
+          "White Jute — সাদা পাট",
+          "Red Jute — লাল পাট",
+          "Tossa Jute — টোসা পাট",
+          "Golden Jute — সোনালী পাট",
+        ],
+        "Mustard / সরিষা": [
+          "Brassica — ব্রাসিকা",
+          "Sarson — সরসন",
+          "Brown Mustard — বাদামী সরিষা",
+          "Yellow Mustard — হলুদ সরিষা",
+        ],
+        "Turmeric / হলুদ": [
+          "Ranga — রাঙ্গা",
+          "Alleppey — এলেপ্পি",
+          "Madras — মাদ্রাস",
+          "Local — স্থানীয়",
+        ],
+        "Tomato / টমেটো": [
+          "Pusa Ruby — পুসা রুবি",
+          "Arka Vikash — আর্কা বিকাশ",
+          "Hybrid-2002 — হাইব্রিড-২০০২",
+          "Local varieties — স্থানীয় জাত",
+        ],
+        "Onion / পেঁয়াজ": [
+          "Pusa Red — পুসা লাল",
+          "Pusa White — পুসা সাদা",
+          "Agrifound Red — এগ্রিফাউন্ড লাল",
+          "Local Red — স্থানীয় লাল",
+        ],
+        "Cabbage / বাঁধাকপি": [
+          "Pride of India — প্রাইড অফ ইন্ডিয়া",
+          "Golden Acre — গোল্ডেন একর",
+          "Hybrid-10 — হাইব্রিড-১০",
+          "Local — স্থানীয়",
+        ],
+        "Broccoli / ব্রকলি": [
+          "Pusa Broccoli — পুসা ব্রকলি",
+          "Green Goddess — গ্রীন গডেস",
+          "Calabrese — ক্যালাব্রিজ",
+          "Hybrid — হাইব্রিড",
+        ],
+        "Papaya / পাপেঁয়া": [
+          "Solo — সোলো",
+          "Red Lady — রেড লেডি",
+          "Taiwan — তাইওয়ান",
+          "Local — স্থানীয়",
+        ],
+        "Mango / আম": [
+          "Himsagar — হিমসাগর",
+          "Langra — লাংড়া",
+          "Alphonso — আলফোনসো",
+          "Local — স্থানীয়",
+        ],
+      };
+
+      // state
+      let selectedBuyerCrops = [];
+
+      document.addEventListener("DOMContentLoaded", function () {
+        populateDistricts();
+        populateBuyerCrops();
+        attachEvents();
+      });
+
+      function populateDistricts() {
+        const districtEl = document.getElementById("district");
+        Object.keys(districtBlockData)
+          .sort()
+          .forEach((d) => {
+            const opt = document.createElement("option");
+            opt.value = d;
+            opt.textContent = d;
+            districtEl.appendChild(opt);
+          });
+      }
+
+      function attachEvents() {
+        document
+          .getElementById("district")
+          .addEventListener("change", onDistrictChange);
+        document
+          .getElementById("buyerForm")
+          .addEventListener("submit", onSubmit);
+        document
+          .getElementById("aadharPhoto")
+          .addEventListener("change", onAadhaarPhoto);
+        document
+          .getElementById("verifyAadhaarBtn")
+          .addEventListener("click", verifyAadhaar);
+        document.getElementById("aadhar").addEventListener("input", () => {
+          document.getElementById("aadharStatus").textContent = "";
+        });
+        document
+          .getElementById("buyerCropsContainer")
+          .addEventListener("change", onBuyerCropsChange);
+      }
+
+      function onDistrictChange() {
+        const district = document.getElementById("district").value;
+        const block = document.getElementById("block");
+        block.innerHTML =
+          '<option value="">Select block — ব্লক নির্বাচন করুন</option>';
+        if (district && districtBlockData[district]) {
+          block.disabled = false;
+          districtBlockData[district].forEach((b) => {
+            const o = document.createElement("option");
+            o.value = b;
+            o.textContent = b;
+            block.appendChild(o);
+          });
+        } else {
+          block.disabled = true;
+        }
+      }
+
+      function populateBuyerCrops() {
+        const cont = document.getElementById("buyerCropsContainer");
+        Object.keys(cropsData)
+          .sort()
+          .forEach((cropKey) => {
+            const id = "buycrop_" + cropKey.replace(/[^a-z0-9]/gi, "_");
+            const wrap = document.createElement("label");
+            wrap.style.marginRight = "8px";
+            wrap.style.display = "flex";
+            wrap.style.alignItems = "center";
+            const cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.id = id;
+            cb.value = cropKey;
+            cb.style.marginRight = "6px";
+            wrap.appendChild(cb);
+            const txt = document.createTextNode(cropKey);
+            wrap.appendChild(txt);
+            cont.appendChild(wrap);
+          });
+      }
+
+      function onBuyerCropsChange() {
+        // build selected list
+        selectedBuyerCrops = Array.from(
+          document.querySelectorAll(
+            "#buyerCropsContainer input[type=checkbox]:checked"
+          )
+        ).map((n) => n.value);
+        updateBuyerSubcategories();
+      }
+
+      function updateBuyerSubcategories() {
+        const subEl = document.getElementById("buyerCropSub");
+        subEl.innerHTML = "";
+        if (selectedBuyerCrops.length === 0) {
+          subEl.disabled = true;
+          return;
+        }
+        subEl.disabled = false;
+        const set = new Set();
+        selectedBuyerCrops.forEach((c) => {
+          const arr = cropsData[c] || [];
+          arr.forEach((s) => set.add(s));
+        });
+        Array.from(set)
+          .sort()
+          .forEach((s) => {
+            const o = document.createElement("option");
+            o.value = s;
+            o.textContent = s;
+            subEl.appendChild(o);
+          });
+      }
+
+      // Aadhaar photo preview
+      function onAadhaarPhoto(e) {
+        const file = e.target.files && e.target.files[0];
+        const err = document.getElementById("aadharPhotoErr");
+        err.classList.remove("show");
+        err.textContent = "";
+        const preview = document.getElementById("aadharPreview");
+        if (!file) {
+          preview.style.display = "none";
+          preview.src = "";
+          return;
+        }
+        if (!file.type.startsWith("image/")) {
+          err.textContent = "Please upload an image file.";
+          err.classList.add("show");
+          e.target.value = "";
+          return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          err.textContent = "Image must be <=5MB.";
+          err.classList.add("show");
+          e.target.value = "";
+          return;
+        }
+        const r = new FileReader();
+        r.onload = function (ev) {
+          preview.src = ev.target.result;
+          preview.style.display = "block";
+        };
+        r.readAsDataURL(file);
+      }
+
+      function verifyAadhaar() {
+        const a = (document.getElementById("aadhar").value || "").trim();
+        const status = document.getElementById("aadharStatus");
+        if (/^\d{12}$/.test(a)) {
+          // simulate verification
+          status.textContent = "Verified ✓ — যাচাই হয়েছে";
+          status.style.color = "green";
+        } else {
+          status.textContent =
+            "Invalid Aadhaar (must be 12 digits) — ১২ অংক দিন";
+          status.style.color = "red";
+        }
+      }
+
+      function validateForm() {
+        let ok = true;
+        const clearErrs = () =>
+          document.querySelectorAll(".error").forEach((e) => {
+            e.classList.remove("show");
+            e.textContent = "";
+          });
+        clearErrs();
+        const name = document.getElementById("fullName").value.trim();
+        if (!name) {
+          document.getElementById("fullNameErr").textContent =
+            "Enter full name";
+          document.getElementById("fullNameErr").classList.add("show");
+          ok = false;
+        }
+        const pin = document.getElementById("pin").value.trim();
+        if (pin && !/^\d{6}$/.test(pin)) {
+          document.getElementById("pinErr").textContent = "Enter 6-digit PIN";
+          document.getElementById("pinErr").classList.add("show");
+          ok = false;
+        }
+        // ensure at least one crop selected
+        if (selectedBuyerCrops.length === 0) {
+          document.getElementById("buyerCropsErr").textContent =
+            "Select at least one crop";
+          document.getElementById("buyerCropsErr").classList.add("show");
+          ok = false;
+        }
+        // subcategories selected
+        const subs = Array.from(
+          document.getElementById("buyerCropSub").selectedOptions
+        ).map((o) => o.value);
+        if (subs.length === 0) {
+          document.getElementById("buyerCropsErr").textContent =
+            "Select at least one crop subcategory";
+          document.getElementById("buyerCropsErr").classList.add("show");
+          ok = false;
+        }
+        return ok;
+      }
+
+      function onSubmit(e) {
+        e.preventDefault();
+        if (!validateForm()) return;
+        const msg = document.getElementById("formMsg");
+        msg.textContent =
+          "Profile submitted successfully — প্রোফাইল সফলভাবে জমা হয়েছে";
+        msg.style.display = "block";
+        setTimeout(() => (msg.style.display = "none"), 4000);
+      }
+
+      function resetForm() {
+        document.getElementById("buyerForm").reset();
+        document.getElementById("block").disabled = true;
+        document.getElementById("block").innerHTML =
+          '<option value="">Select block — ব্লক নির্বাচন করুন</option>';
+        document.getElementById("aadharPreview").style.display = "none";
+        document.getElementById("buyerCropSub").disabled = true;
+        selectedBuyerCrops = [];
+        document
+          .querySelectorAll("#buyerCropsContainer input[type=checkbox]")
+          .forEach((cb) => (cb.checked = false));
+        document.querySelectorAll(".error").forEach((e) => {
+          e.classList.remove("show");
+          e.textContent = "";
+        });
+        document.getElementById("aadharStatus").textContent = "";
+      }
+    </script>
+  </body>
+</html>
