@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Farmer Profile Details — কৃষক প্রোফাইল বিবরণ</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg: #f7fbf6;
+        --card: #ffffff;
+        --accent: #2b8a3e;
+        --muted: #6b7280;
+        --danger: #d9534f;
+        --success: #0f9d58;
+        --border: #e6e9ef;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans",
+          "Helvetica Neue", Arial;
+      }
+
+      html,
+      body {
+        height: 100%;
+        background: linear-gradient(180deg, #eef7ef 0%, var(--bg) 100%);
+        color: #111;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 24px;
+        min-height: 100vh;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+        color: var(--accent);
+      }
+
+      .lang-toggle {
+        display: flex;
+        gap: 8px;
+      }
+
+      .lang-btn {
+        padding: 8px 16px;
+        border: 2px solid var(--accent);
+        background: transparent;
+        color: var(--accent);
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .lang-btn.active {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .lang-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 12px;
+        box-shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
+        padding: 28px;
+        margin-bottom: 24px;
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--accent);
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 6px;
+        color: #0f172a;
+        font-weight: 500;
+      }
+
+      .bilingual {
+        font-size: 12px;
+        color: var(--muted);
+        display: block;
+        margin-top: 2px;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 14px;
+        background: transparent;
+        transition: border-color 0.3s ease;
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(43, 138, 62, 0.1);
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .row.full {
+        grid-template-columns: 1fr;
+      }
+
+      .multi-select-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--accent);
+      }
+
+      .checkbox-item label {
+        margin: 0;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .selected-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .tag {
+        background: #eef3ee;
+        color: var(--accent);
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .tag .remove {
+        cursor: pointer;
+        font-weight: bold;
+        opacity: 0.7;
+      }
+
+      .tag .remove:hover {
+        opacity: 1;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(43, 138, 62, 0.3);
+      }
+
+      .btn-secondary {
+        background: #eef3ee;
+        color: var(--accent);
+        border: 1px solid rgba(43, 138, 62, 0.12);
+      }
+
+      .btn-secondary:hover {
+        background: #dfe9df;
+      }
+
+      .error {
+        color: var(--danger);
+        font-size: 12px;
+        margin-top: 4px;
+        display: none;
+      }
+
+      .error.show {
+        display: block;
+      }
+
+      .success {
+        color: var(--success);
+        font-size: 14px;
+        margin-top: 8px;
+        display: none;
+      }
+
+      .success.show {
+        display: block;
+      }
+
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      @media (max-width: 768px) {
+        .row {
+          grid-template-columns: 1fr;
+        }
+
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .card {
+          padding: 20px;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div>
+          <h1 id="pageTitle">Farmer Profile Details</h1>
+        </div>
+      </div>
+
+      <form id="farmerForm" novalidate>
+        <!-- Basic Details Section -->
+        <div class="card">
+          <h2 class="section-title" id="basicTitle">Basic Details</h2>
+
+          <!-- Name Field -->
+          <div class="form-group">
+            <label for="farmerName" id="nameLabel">Farmer Name</label>
+            <span class="bilingual" id="nameBilingual">আপনার নাম</span>
+            <input
+              type="text"
+              id="farmerName"
+              name="farmerName"
+              placeholder="Enter your full name — আপনার সম্পূর্ণ নাম দিন"
+              required
+            />
+            <div class="error" id="nameErr"></div>
+          </div>
+
+          <!-- District and Block Row -->
+          <div class="row">
+            <div class="form-group">
+              <label for="district" id="districtLabel"
+                >District (West Bengal)</label
+              >
+              <span class="bilingual" id="districtBilingual"
+                >জেলা (পশ্চিমবঙ্গ)</span
+              >
+              <select id="district" name="district" required>
+                <option value="">Select district — জেলা বেছাই করুন</option>
+              </select>
+              <div class="error" id="districtErr"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="block" id="blockLabel">Block</label>
+              <span class="bilingual" id="blockBilingual">ব্লক</span>
+              <select id="block" name="block" required disabled>
+                <option value="">Select block — ব্লক বেছাই করুন</option>
+              </select>
+              <div class="error" id="blockErr"></div>
+            </div>
+          </div>
+
+          <!-- Village and PIN Row -->
+          <div class="row">
+            <div class="form-group">
+              <label for="village" id="villageLabel">Village Name</label>
+              <span class="bilingual" id="villageBilingual">গ্রাম</span>
+              <input
+                type="text"
+                id="village"
+                name="village"
+                placeholder="Enter village name — গ্রামের নাম দিন"
+                required
+              />
+              <div class="error" id="villageErr"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="pin" id="pinLabel">PIN Code</label>
+              <span class="bilingual" id="pinBilingual">পিন কোড</span>
+              <input
+                type="text"
+                id="pin"
+                name="pin"
+                placeholder="e.g., 700001"
+                maxlength="6"
+                required
+              />
+              <div class="error" id="pinErr"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Land Details Section -->
+        <div class="card">
+          <h2 class="section-title" id="landTitle">Land Details</h2>
+
+          <!-- Land Size Row -->
+          <div class="row">
+            <div class="form-group">
+              <label for="landSize" id="landSizeLabel"
+                >Land Size (in acres)</label
+              >
+              <span class="bilingual" id="landSizeBilingual"
+                >জমির আকার (একর)</span
+              >
+              <input
+                type="number"
+                id="landSize"
+                name="landSize"
+                placeholder="e.g., 2.5"
+                step="0.1"
+                min="0"
+                required
+              />
+              <div class="error" id="landSizeErr"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="croppingPattern" id="croppingLabel"
+                >Cropping Pattern</label
+              >
+              <span class="bilingual" id="croppingBilingual"
+                >ফসল কাটার ধরন</span
+              >
+              <select id="croppingPattern" name="croppingPattern" required>
+                <option value="">
+                  Select cropping pattern — ফসল কাটার ধরন বেছাই করুন
+                </option>
+                <option value="single">Single Cropped — এক মৌসুমী</option>
+                <option value="double">Double Cropped — দুই মৌসুমী</option>
+                <option value="triple">Triple Cropped — তিন মৌসুমী</option>
+              </select>
+              <div class="error" id="croppingErr"></div>
+            </div>
+          </div>
+
+          <!-- Crops Selection -->
+          <div class="form-group">
+            <label id="cropsLabel">Crops (Select one or more)</label>
+            <span class="bilingual" id="cropsBilingual"
+              >ফসল (এক বা একাধিক বেছাই করুন)</span
+            >
+            <div class="multi-select-group" id="cropsContainer">
+              <!-- Checkboxes will be generated by JavaScript -->
+            </div>
+            <div class="selected-items" id="selectedCrops"></div>
+            <div class="error" id="cropsErr"></div>
+          </div>
+
+          <!-- Crop Subcategories -->
+          <div class="form-group">
+            <label for="cropSubcategory" id="subcategoryLabel"
+              >Crop Subcategories</label
+            >
+            <span class="bilingual" id="subcategoryBilingual"
+              >ফসলের উপবিভাগ</span
+            >
+            <select
+              id="cropSubcategory"
+              name="cropSubcategory"
+              multiple
+              size="5"
+              required
+              disabled
+            >
+              <option value="">
+                Select subcategories — উপবিভাগ বেছাই করুন
+              </option>
+            </select>
+            <p class="hint" id="subcategoryHint">
+              Hold Ctrl (Cmd on Mac) to select multiple
+            </p>
+            <div class="error" id="subcategoryErr"></div>
+          </div>
+        </div>
+
+        <!-- Button Group -->
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            Submit — জমা দিন
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            id="clearBtn"
+            onclick="resetForm()"
+          >
+            Clear — মুছে ফেলুন
+          </button>
+        </div>
+
+        <div class="success" id="successMsg"></div>
+      </form>
+    </div>
+
+    <script>
+      // Language strings
+      const strings = {
+        en: {
+          pageTitle: "Farmer Profile Details",
+          basicTitle: "Basic Details",
+          landTitle: "Land Details",
+          nameLabel: "Farmer Name",
+          nameBilingual: "আপনার নাম",
+          districtLabel: "District (West Bengal)",
+          districtBilingual: "জেলা (পশ্চিমবঙ্গ)",
+          blockLabel: "Block",
+          blockBilingual: "ব্লক",
+          villageLabel: "Village Name",
+          villageBilingual: "গ্রাম",
+          pinLabel: "PIN Code",
+          pinBilingual: "পিন কোড",
+          landSizeLabel: "Land Size (in acres)",
+          landSizeBilingual: "জমির আকার (একর)",
+          croppingLabel: "Cropping Pattern",
+          croppingBilingual: "ফসল কাটার ধরন",
+          cropsLabel: "Crops (Select one or more)",
+          cropsBilingual: "ফসল (এক বা একাধিক বেছাই করুন)",
+          subcategoryLabel: "Crop Subcategories",
+          subcategoryBilingual: "ফসলের উপবিভাগ",
+          subcategoryHint: "Hold Ctrl (Cmd on Mac) to select multiple",
+          submitBtn: "Submit — জমা দিন",
+          clearBtn: "Clear — মুছে ফেলুন",
+          selectDistrict: "Select district — জেলা বেছাই করুন",
+          selectBlock: "Select block — ব্লক বেছাই করুন",
+          selectSubcategory: "Select subcategories — উপবিভাগ বেছাই করুন",
+        },
+        bn: {
+          pageTitle: "কৃষক প্রোফাইল বিবরণ",
+          basicTitle: "মৌলিক বিবরণ",
+          landTitle: "জমির বিবরণ",
+          nameLabel: "আপনার নাম",
+          nameBilingual: "আপনার সম্পূর্ণ নাম দিন",
+          districtLabel: "জেলা (পশ্চিমবঙ্গ)",
+          districtBilingual: "জেলা বেছাই করুন",
+          blockLabel: "ব্লক",
+          blockBilingual: "ব্লক বেছাই করুন",
+          villageLabel: "গ্রাম",
+          villageBilingual: "গ্রামের নাম দিন",
+          pinLabel: "পিন কোড",
+          pinBilingual: "পিন কোড দিন",
+          landSizeLabel: "জমির আকার (একর)",
+          landSizeBilingual: "জমির আকার প্রবেশ করুন",
+          croppingLabel: "ফসল কাটার ধরন",
+          croppingBilingual: "ফসল কাটার ধরন বেছাই করুন",
+          cropsLabel: "ফসল (এক বা একাধিক বেছাই করুন)",
+          cropsBilingual: "ফসল বেছাই করুন",
+          subcategoryLabel: "ফসলের উপবিভাগ",
+          subcategoryBilingual: "ফসলের উপবিভাগ বেছাই করুন",
+          subcategoryHint: "একাধিক নির্বাচন করতে Ctrl (Mac-এ Cmd) ধরুন",
+          submitBtn: "জমা দিন — Submit",
+          clearBtn: "মুছে ফেলুন — Clear",
+          selectDistrict: "জেলা বেছাই করুন — Select district",
+          selectBlock: "ব্লক বেছাই করুন — Select block",
+          selectSubcategory: "উপবিভাগ বেছাই করুন — Select subcategories",
+        },
+      };
+
+      // West Bengal Districts and Blocks
+      const districtBlockData = {
+        Alipurduar: ["Alipurduar I", "Alipurduar II"],
+        Bankura: [
+          "Bankura I",
+          "Bankura II",
+          "Bishnupur",
+          "Khatra",
+          "Santiniketan",
+        ],
+        Bardhaman: ["Bardhaman I", "Bardhaman II", "Asansol", "Durgapur"],
+        Darjeeling: ["Darjeeling", "Kalimpong", "Kurseong"],
+        "East Medinipur": ["Egra", "Haldia", "Medinipur", "Ramnagar", "Tamluk"],
+        Hooghly: [
+          "Arambagh",
+          "Dhaniakhali",
+          "Dhubulia",
+          "Goghat",
+          "Polba",
+          "Serampore",
+        ],
+        Howrah: ["Amta", "Howrah", "Jagatballavpur", "Panchla", "Shyampur"],
+        Jalpaiguri: ["Jalpaiguri", "Maynaguri", "Nagrakata", "Rajganj"],
+        Jhargram: ["Goaltore", "Jhargram", "Nayagram", "Porahat"],
+        Kolkata: ["Alipore", "Ballygunge", "Shyam Bazaar"],
+        Malda: ["Habibpur", "Kaliachak", "Malda", "Manigram"],
+        Murshidabad: [
+          "Berhampur",
+          "Burwan",
+          "Khagra",
+          "Lalgola",
+          "Raghunathganj",
+        ],
+        Nadia: ["Chakdah", "Kaliganj", "Krishnanagar", "Nabadwip"],
+        "North 24 Parganas": ["Barasat", "Basirhat", "Bidhannagar", "Rajarhat"],
+        "North Dinajpur": ["Balurghat", "Birbhum", "Gangarampur"],
+        "Purba Bardhaman": ["Jamalpur", "Kalna", "Katwa", "Purba Bardhaman"],
+        Purulia: ["Baghmundi", "Purulia", "Raghunathpur"],
+        "South 24 Parganas": ["Baruipur", "Canning", "Kolkhali", "Sundarban"],
+        "South Dinajpur": ["Gangarampur", "Kumarganj", "Tapan"],
+        "West Medinipur": ["Debra", "Kharagpur", "Medinipur", "Moyna"],
+        Birbhum: ["Bolpur", "Rampurhat", "Suri"],
+      };
+
+      // Crops and Subcategories - West Bengal Based with Bilingual Support
+      const cropsData = {
+        "Rice / ধান": [
+          "Swarna — স্বর্ণা",
+          "IR-64 — আইআর-৬৪",
+          "Rajendra Kasturi — রাজেন্দ্র কাস্তুরী",
+          "Sona Masuri — সোনা মাসুরি",
+          "Basmati — বাসমতি",
+        ],
+        "Wheat / গম": [
+          "HD-2733 — এইচডি-২৭৩৩",
+          "PBW-343 — পিবিডাবলিউ-৩৪৩",
+          "UP-2338 — ইউপি-২৩৩৮",
+          "Sonalika — সোনালিকা",
+        ],
+        "Maize / ভুট্টা": [
+          "Dekalb — ডেকালব",
+          "Pioneer — পাইওনিয়ার",
+          "Hybrids — হাইব্রিড",
+          "Local varieties — স্থানীয় জাত",
+        ],
+        "Potato / আলু": [
+          "Kufri Pukhraj — কুফরি পুখরাজ",
+          "Kufri Himalini — কুফরি হিমালিনী",
+          "Kufri Aloo Jai — কুফরি আলু জাই",
+          "Local Red — স্থানীয় লাল",
+        ],
+        "Pulses / ডাল": [
+          "Masur — মাসুর",
+          "Moong — মুং",
+          "Arhar — অড়হর",
+          "Gram — ছোলা",
+        ],
+        "Sugarcane / আখ": [
+          "Co-86031 — কো-৮৬০৩১",
+          "Co-99004 — কো-৯৯০০৪",
+          "Local — স্থানীয়",
+          "Co-0118 — কো-০১১৮",
+        ],
+        "Jute / পাট": [
+          "White Jute — সাদা পাট",
+          "Red Jute — লাল পাট",
+          "Tossa Jute — টোসা পাট",
+          "Golden Jute — সোনালী পাট",
+        ],
+        "Mustard / সরিষা": [
+          "Brassica — ব্রাসিকা",
+          "Sarson — সরসন",
+          "Brown Mustard — বাদামী সরিষা",
+          "Yellow Mustard — হলুদ সরিষা",
+        ],
+        "Turmeric / হলুদ": [
+          "Ranga — রাঙ্গা",
+          "Alleppey — এলেপ্পি",
+          "Madras — মাদ্রাস",
+          "Local — স্থানীয়",
+        ],
+        "Tomato / টমেটো": [
+          "Pusa Ruby — পুসা রুবি",
+          "Arka Vikash — আর্কা বিকাশ",
+          "Hybrid-2002 — হাইব্রিড-২০০২",
+          "Local varieties — স্থানীয় জাত",
+        ],
+        "Onion / পেঁয়াজ": [
+          "Pusa Red — পুসা লাল",
+          "Pusa White — পুসা সাদা",
+          "Agrifound Red — এগ্রিফাউন্ড লাল",
+          "Local Red — স্থানীয় লাল",
+        ],
+        "Cabbage / বাঁধাকপি": [
+          "Pride of India — প্রাইড অফ ইন্ডিয়া",
+          "Golden Acre — গোল্ডেন একর",
+          "Hybrid-10 — হাইব্রিড-১০",
+          "Local — স্থানীয়",
+        ],
+        "Broccoli / ব্রকলি": [
+          "Pusa Broccoli — পুসা ব্রকলি",
+          "Green Goddess — গ্রীন গডেস",
+          "Calabrese — ক্যালাব্রিজ",
+          "Hybrid — হাইব্রিড",
+        ],
+        "Papaya / পাপেঁয়া": [
+          "Solo — সোলো",
+          "Red Lady — রেড লেডি",
+          "Taiwan — তাইওয়ান",
+          "Local — স্থানীয়",
+        ],
+        "Mango / আম": [
+          "Himsagar — হিমসাগর",
+          "Langra — লাংড়া",
+          "Alphonso — আলফোনসো",
+          "Local — স্থানীয়",
+        ],
+      };
+
+      let currentLanguage = "en";
+      let selectedCrops = [];
+
+      // Initialize form
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeForm();
+        setupEventListeners();
+      });
+
+      function initializeForm() {
+        // Populate districts
+        const districtSelect = document.getElementById("district");
+        Object.keys(districtBlockData)
+          .sort()
+          .forEach((district) => {
+            const option = document.createElement("option");
+            option.value = district;
+            option.textContent = district;
+            districtSelect.appendChild(option);
+          });
+
+        // Populate crops checkboxes
+        const cropsContainer = document.getElementById("cropsContainer");
+        Object.keys(cropsData)
+          .sort()
+          .forEach((crop) => {
+            const checkboxItem = document.createElement("div");
+            checkboxItem.className = "checkbox-item";
+            checkboxItem.innerHTML = `
+                    <input type="checkbox" id="crop_${crop}" value="${crop}" onchange="handleCropChange()">
+                    <label for="crop_${crop}">${crop}</label>
+                `;
+            cropsContainer.appendChild(checkboxItem);
+          });
+      }
+
+      function setupEventListeners() {
+        document
+          .getElementById("district")
+          .addEventListener("change", function () {
+            updateBlocks();
+          });
+
+        document
+          .getElementById("farmerForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            handleFormSubmit();
+          });
+      }
+
+      function updateBlocks() {
+        const districtSelect = document.getElementById("district");
+        const blockSelect = document.getElementById("block");
+        const selectedDistrict = districtSelect.value;
+
+        // Clear existing options
+        blockSelect.innerHTML = `<option value="">Select block — ব্লক বেছাই করুন</option>`;
+
+        if (selectedDistrict && districtBlockData[selectedDistrict]) {
+          blockSelect.disabled = false;
+          districtBlockData[selectedDistrict].forEach((block) => {
+            const option = document.createElement("option");
+            option.value = block;
+            option.textContent = block;
+            blockSelect.appendChild(option);
+          });
+        } else {
+          blockSelect.disabled = true;
+          blockSelect.value = "";
+        }
+      }
+
+      function handleCropChange() {
+        selectedCrops = [];
+        const checkboxes = document.querySelectorAll(
+          'input[id^="crop_"]:checked'
+        );
+        checkboxes.forEach((checkbox) => {
+          selectedCrops.push(checkbox.value);
+        });
+
+        // Update selected crops display
+        const selectedCropsDiv = document.getElementById("selectedCrops");
+        selectedCropsDiv.innerHTML = "";
+        selectedCrops.forEach((crop) => {
+          const tag = document.createElement("div");
+          tag.className = "tag";
+          tag.innerHTML = `
+                    ${crop}
+                    <span class="remove" onclick="removeCrop('${crop}')">×</span>
+                `;
+          selectedCropsDiv.appendChild(tag);
+        });
+
+        // Update subcategories
+        updateSubcategories();
+      }
+
+      function removeCrop(crop) {
+        const checkbox = document.getElementById(`crop_${crop}`);
+        checkbox.checked = false;
+        handleCropChange();
+      }
+
+      function updateSubcategories() {
+        const subcategorySelect = document.getElementById("cropSubcategory");
+        subcategorySelect.innerHTML = `<option value="">Select subcategories — উপবিভাগ বেছাই করুন</option>`;
+
+        if (selectedCrops.length > 0) {
+          subcategorySelect.disabled = false;
+          const allSubcategories = new Set();
+
+          selectedCrops.forEach((crop) => {
+            if (cropsData[crop]) {
+              cropsData[crop].forEach((subcategory) => {
+                allSubcategories.add(subcategory);
+              });
+            }
+          });
+
+          Array.from(allSubcategories)
+            .sort()
+            .forEach((subcategory) => {
+              const option = document.createElement("option");
+              option.value = subcategory;
+              option.textContent = subcategory;
+              subcategorySelect.appendChild(option);
+            });
+        } else {
+          subcategorySelect.disabled = true;
+        }
+      }
+
+      function handleFormSubmit() {
+        if (validateForm()) {
+          const successMsg = document.getElementById("successMsg");
+          successMsg.textContent =
+            currentLanguage === "en"
+              ? "Profile updated successfully!"
+              : "প্রোফাইল সফলভাবে আপডেট হয়েছে!";
+          successMsg.classList.add("show");
+
+          setTimeout(() => {
+            successMsg.classList.remove("show");
+          }, 3000);
+        }
+      }
+
+      function validateForm() {
+        clearAllErrors();
+        let isValid = true;
+
+        // Validate Name
+        const name = document.getElementById("farmerName").value.trim();
+        if (!name) {
+          showError("nameErr", "Please enter farmer name");
+          isValid = false;
+        }
+
+        // Validate District
+        const district = document.getElementById("district").value;
+        if (!district) {
+          showError("districtErr", "Please select a district");
+          isValid = false;
+        }
+
+        // Validate Block
+        const block = document.getElementById("block").value;
+        if (!block) {
+          showError("blockErr", "Please select a block");
+          isValid = false;
+        }
+
+        // Validate Village
+        const village = document.getElementById("village").value.trim();
+        if (!village) {
+          showError("villageErr", "Please enter village name");
+          isValid = false;
+        }
+
+        // Validate PIN
+        const pin = document.getElementById("pin").value.trim();
+        if (!pin || !/^\d{6}$/.test(pin)) {
+          showError("pinErr", "Please enter a valid 6-digit PIN code");
+          isValid = false;
+        }
+
+        // Validate Land Size
+        const landSize = parseFloat(document.getElementById("landSize").value);
+        if (!landSize || landSize <= 0) {
+          showError("landSizeErr", "Please enter a valid land size");
+          isValid = false;
+        }
+
+        // Validate Cropping Pattern
+        const cropping = document.getElementById("croppingPattern").value;
+        if (!cropping) {
+          showError("croppingErr", "Please select a cropping pattern");
+          isValid = false;
+        }
+
+        // Validate Crops
+        if (selectedCrops.length === 0) {
+          showError("cropsErr", "Please select at least one crop");
+          isValid = false;
+        }
+
+        // Validate Subcategories
+        const subcategories = Array.from(
+          document.getElementById("cropSubcategory").selectedOptions
+        ).map((opt) => opt.value);
+        if (subcategories.length === 0) {
+          showError("subcategoryErr", "Please select at least one subcategory");
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      function showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        errorElement.textContent = message;
+        errorElement.classList.add("show");
+      }
+
+      function clearAllErrors() {
+        const errors = document.querySelectorAll(".error");
+        errors.forEach((error) => {
+          error.classList.remove("show");
+          error.textContent = "";
+        });
+      }
+
+      function resetForm() {
+        document.getElementById("farmerForm").reset();
+        document.getElementById("block").disabled = true;
+        document.getElementById(
+          "block"
+        ).innerHTML = `<option value="">Select block — ব্লক বেছাই করুন</option>`;
+        document.getElementById("cropSubcategory").disabled = true;
+        document.getElementById(
+          "cropSubcategory"
+        ).innerHTML = `<option value="">Select subcategories — উপবিভাগ বেছাই করুন</option>`;
+
+        // Uncheck all crops
+        document.querySelectorAll('input[id^="crop_"]').forEach((checkbox) => {
+          checkbox.checked = false;
+        });
+        selectedCrops = [];
+        document.getElementById("selectedCrops").innerHTML = "";
+        clearAllErrors();
+      }
+
+      function switchLanguage(lang) {
+        currentLanguage = lang;
+
+        // Update button styles
+        document
+          .getElementById("enBtn")
+          .classList.toggle("active", lang === "en");
+        document
+          .getElementById("bnBtn")
+          .classList.toggle("active", lang === "bn");
+
+        // Update all text elements
+        const str = strings[lang];
+        document.getElementById("pageTitle").textContent = str.pageTitle;
+        document.getElementById("basicTitle").textContent = str.basicTitle;
+        document.getElementById("landTitle").textContent = str.landTitle;
+        document.getElementById("nameLabel").textContent = str.nameLabel;
+        document.getElementById("nameBilingual").textContent =
+          str.nameBilingual;
+        document.getElementById("districtLabel").textContent =
+          str.districtLabel;
+        document.getElementById("districtBilingual").textContent =
+          str.districtBilingual;
+        document.getElementById("blockLabel").textContent = str.blockLabel;
+        document.getElementById("blockBilingual").textContent =
+          str.blockBilingual;
+        document.getElementById("villageLabel").textContent = str.villageLabel;
+        document.getElementById("villageBilingual").textContent =
+          str.villageBilingual;
+        document.getElementById("pinLabel").textContent = str.pinLabel;
+        document.getElementById("pinBilingual").textContent = str.pinBilingual;
+        document.getElementById("landSizeLabel").textContent =
+          str.landSizeLabel;
+        document.getElementById("landSizeBilingual").textContent =
+          str.landSizeBilingual;
+        document.getElementById("croppingLabel").textContent =
+          str.croppingLabel;
+        document.getElementById("croppingBilingual").textContent =
+          str.croppingBilingual;
+        document.getElementById("cropsLabel").textContent = str.cropsLabel;
+        document.getElementById("cropsBilingual").textContent =
+          str.cropsBilingual;
+        document.getElementById("subcategoryLabel").textContent =
+          str.subcategoryLabel;
+        document.getElementById("subcategoryBilingual").textContent =
+          str.subcategoryBilingual;
+        document.getElementById("subcategoryHint").textContent =
+          str.subcategoryHint;
+        document.getElementById("submitBtn").textContent = str.submitBtn;
+        document.getElementById("clearBtn").textContent = str.clearBtn;
+
+        // Update select placeholders
+        document.getElementById(
+          "district"
+        ).innerHTML = `<option value="">${str.selectDistrict}</option>`;
+        Object.keys(districtBlockData)
+          .sort()
+          .forEach((district) => {
+            const option = document.createElement("option");
+            option.value = district;
+            option.textContent = district;
+            document.getElementById("district").appendChild(option);
+          });
+
+        document.getElementById(
+          "block"
+        ).innerHTML = `<option value="">${str.selectBlock}</option>`;
+
+        document.getElementById(
+          "cropSubcategory"
+        ).innerHTML = `<option value="">${str.selectSubcategory}</option>`;
+
+        // Update cropping pattern options
+        document.getElementById("croppingPattern").innerHTML = `
+                <option value="">Select cropping pattern — ফসল কাটার ধরন বেছাই করুন</option>
+                <option value="single">${
+                  lang === "en"
+                    ? "Single Cropped — এক মৌসুমী"
+                    : "এক মৌসুমী — Single Cropped"
+                }</option>
+                <option value="double">${
+                  lang === "en"
+                    ? "Double Cropped — দুই মৌসুমী"
+                    : "দুই মৌসুমী — Double Cropped"
+                }</option>
+                <option value="triple">${
+                  lang === "en"
+                    ? "Triple Cropped — তিন মৌসুমী"
+                    : "তিন মৌসুমী — Triple Cropped"
+                }</option>
+            `;
+      }
+    </script>
+  </body>
+</html>
