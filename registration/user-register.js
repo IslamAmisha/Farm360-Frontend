@@ -12,7 +12,9 @@ const text = {
     roleBuyer: "Buyer",
     btnRegister: "Register",
     btnClear: "Clear",
-    termsHint: "By registering you agree to our terms."
+    termsHint: "By registering you agree to our terms.",
+    backBtn: "‹ Back",
+
   },
   bn: {
     regTitle: "আপনার অ্যাকাউন্ট তৈরি করুন",
@@ -24,7 +26,9 @@ const text = {
     roleBuyer: "ক্রেতা",
     btnRegister: "নিবন্ধন",
     btnClear: "মুছে ফেলুন",
-    termsHint: "নিবন্ধন করে আপনি আমাদের শর্তাবলীতে সম্মত হচ্ছেন।"
+    termsHint: "নিবন্ধন করে আপনি আমাদের শর্তাবলীতে সম্মত হচ্ছেন।",
+    backBtn: "‹ ফিরে যান",
+
   }
 };
 

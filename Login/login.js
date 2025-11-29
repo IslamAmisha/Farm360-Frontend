@@ -10,7 +10,8 @@ const text = {
     btnLogin: "Login",
     btnClear: "Clear",
     footerHint: "Don't have an account? Register first.",
-    goRegisterText: "Don’t have an account? Register",
+    goRegisterText: "Don’t have an account?",
+    backBtn: "‹ Back",
 
   },
   bn: {
@@ -21,7 +22,8 @@ const text = {
     btnLogin: "লগইন",
     btnClear: "মুছে ফেলুন",
     footerHint: "অ্যাকাউন্ট নেই? আগে রেজিস্টার করুন।",
-    goRegisterText: "অ্যাকাউন্ট নেই? রেজিস্টার করুন",
+    goRegisterText: "অ্যাকাউন্ট নেই?",
+    backBtn: "‹ ফিরে যান",
 
   }
 };
